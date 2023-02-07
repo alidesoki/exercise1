@@ -1,14 +1,19 @@
 version: 2.1 
 
 jobs: 
-    copy-ips:
-      steps:
-        - checkout
-        - run: |
-            touch inventory.txt
-            echo [all] > inventory.txt
-            aws ec2 describe-instances \
-            --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --filters "Name=tag:Project,Values=udacity" \
-            --output text >> inventory
+  copy-ips:
+    docker:
+      - image: alpinelinux/ansible
+    steps:
+      - checkout
+      - run: touch inventory.txt
+      - run: echo [all] > inventory.txt
+      - run:  aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:Project,Values=udacity" \
+              --output text >> inventory
+      - run: ansible-playbook main.yml
 
+workflows:
+  prod:
+    - copy-ips

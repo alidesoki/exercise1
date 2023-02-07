@@ -3,7 +3,7 @@ version: 2.1
 jobs: 
   copy-ips:
     docker:
-      - image: cimg/base:stable
+      - image: alpinelinux/ansible
     steps:
       - checkout
       - run: touch inventory.txt

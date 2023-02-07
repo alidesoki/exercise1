@@ -16,4 +16,5 @@ jobs:
 
 workflows:
   prod:
-    - copy-ips
+    jobs:
+      - copy-ips
